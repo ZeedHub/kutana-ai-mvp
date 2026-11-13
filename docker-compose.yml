@@ -1,0 +1,18 @@
+services:
+  db:
+    image: pgvector/pgvector:pg16
+    environment:
+      POSTGRES_USER: kutana
+      POSTGRES_PASSWORD: kutana
+      POSTGRES_DB: kutana
+    ports: ["5432:5432"]
+    volumes: [pgdata:/var/lib/postgresql/data]
+  api:
+    build: .
+    env_file: .env
+    environment:
+      DATABASE_URL: postgresql+asyncpg://kutana:kutana@db:5432/kutana
+    depends_on: [db]
+    ports: ["8000:8000"]
+volumes:
+  pgdata:
